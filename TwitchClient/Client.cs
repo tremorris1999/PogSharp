@@ -5,7 +5,7 @@ using System.Text.Json.Nodes;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace PogPillSharp.TwitchClient;
+namespace PogSharp.TwitchClient;
 
 public class Client
 {
