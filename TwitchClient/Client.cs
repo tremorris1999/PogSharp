@@ -68,7 +68,7 @@ public class Client
       Title = clipData.GetIndexValue<string>("title"),
       Broadcaster = clipData.GetIndexValue<string>("broadcaster_name"),
       Duration = clipData.GetIndexValue<int>("duration"),
-      ThumnailUri = clipData.GetIndexValue<string>("thumbnail_url"),
+      ThumbnailUri = clipData.GetIndexValue<string>("thumbnail_url"),
       VideoUri = clipData.GetIndexValue<string>("thumbnail_url")
         .Replace("-preview-480x272.jpg", ".mp4")
     };
@@ -83,7 +83,7 @@ public class Client
       Title = clipData.GetIndexValue<string>("title"),
       Broadcaster = clipData.GetIndexValue<string>("broadcaster_name"),
       Duration = clipData.GetIndexValue<int>("duration"),
-      ThumnailUri = clipData.GetIndexValue<string>("thumbnail_url"),
+      ThumbnailUri = clipData.GetIndexValue<string>("thumbnail_url"),
       VideoUri = clipData.GetIndexValue<string>("thumbnail_url")
         .Replace("-preview-480x272.jpg", ".mp4")
     };
