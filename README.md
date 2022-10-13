@@ -1,6 +1,9 @@
 # PogSharp
 Lightweight .NET 6.0 library for interacting with the Twitch API.
 
+![image](https://user-images.githubusercontent.com/61497457/195494410-7062605d-6356-4806-9041-6676cf5a8cf1.png)
+
+
 ## Overview
 This was created to be a simple clip-downloading library for a personal project, but this *could* expand to include other functionality as needed.
 Currently, PogSharp is only capable of downloading twitch clips by direct clip id, but [could be expanded](https://dev.twitch.tv/docs/api/clips) to search/discover clips if anyone wants to implement it.
@@ -53,7 +56,7 @@ public class Program
 }
 ```
 
-Running this should download the clip in the first parameter of the [DownloadClip]() call to whatever directory your code executed in.
+Running this should download the clip in the first parameter of the [DownloadClip](https://github.com/tremorris1999/PogSharp/blob/02adcdc009b29b8754610d6a2565da23602128a4/TwitchClient/Client.cs#L32) call to whatever directory your code executed in.
 
 ## Contribution
 Feel free to fork the repo and implement whatever features you'd like, I'd be more than happy to accept any well-put-together PR into the main repo.
