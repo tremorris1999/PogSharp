@@ -29,14 +29,6 @@ public class Client
     _httpClient.DefaultRequestHeaders.Accept.Add(new("application/json"));
   }
 
-  public void DownloadClip(string url, string filePath)
-  {
-    Clip clip = GetClip(url);
-    Stream stream = Task.Run(async ()=> await _httpClient.GetStreamAsync(clip.VideoUri)).Result;
-    using FileStream fileStream = File.OpenWrite(filePath);
-    Task.Run(async() => await stream.CopyToAsync(fileStream)).Wait();
-  }
-
   public async Task DownloadClipAsync(string url, string filePath)
   {
     Clip clip = await GetClipAsync(url);
@@ -45,13 +37,6 @@ public class Client
     await stream.CopyToAsync(fileStream);
   }
 
-  public void DownloadClip(Clip clip, string filePath)
-  {
-    Stream stream = Task.Run(async ()=> await _httpClient.GetStreamAsync(clip.VideoUri)).Result;
-    using FileStream fileStream = File.OpenWrite(filePath);
-    Task.Run(async() => await stream.CopyToAsync(fileStream)).Wait();
-  }
-  
   public async Task DownloadClipAsync(Clip clip, string filePath)
   {
     Stream stream = await _httpClient.GetStreamAsync(clip.VideoUri);
@@ -59,20 +44,14 @@ public class Client
     await stream.CopyToAsync(fileStream);
   }
 
+  public void DownloadClip(Clip clip, string filePath)
+    => Task.Run(async () => await DownloadClipAsync(clip, filePath)).Wait();
+
+  public void DownloadClip(string url, string filePath)
+    => Task.Run(async () => await DownloadClipAsync(url, filePath)).Wait();
+
   public Clip GetClip(string url)
-  {
-    JsonObject? clipData = GetClipData(url);
-    return new()
-    {
-      Id = clipData.GetIndexValue<string>("id"),
-      Title = clipData.GetIndexValue<string>("title"),
-      Broadcaster = clipData.GetIndexValue<string>("broadcaster_name"),
-      Duration = clipData.GetIndexValue<int>("duration"),
-      ThumbnailUri = clipData.GetIndexValue<string>("thumbnail_url"),
-      VideoUri = clipData.GetIndexValue<string>("thumbnail_url")
-        .Replace("-preview-480x272.jpg", ".mp4")
-    };
-  }
+    => Task.Run(async () => await GetClipAsync(url)).Result;
 
   public async Task<Clip> GetClipAsync(string url)
   {
@@ -89,34 +68,17 @@ public class Client
     };
   }
 
-  private JsonObject? GetClipData(string url)
-  {
-    string id = GetClipId(url);
-    HttpResponseMessage response = Task.Run(async () => await RequestClipAsync(id)).Result;
-    if(response.StatusCode is System.Net.HttpStatusCode.Unauthorized)
-    {
-      RefreshToken();
-      response = Task.Run(async () => await RequestClipAsync(id)).Result;
-    }
-
-    if(!response.IsSuccessStatusCode)
-      throw new ApplicationException("Unable to fetch clip.");
-
-    JsonNode? responseData = JsonSerializer.Deserialize<JsonNode>(response.Content.ReadAsStream());
-    return responseData?["data"]?[0]?.AsObject();
-  }
-
   private async Task<JsonObject?> GetClipDataAsync(string url)
   {
     string id = GetClipId(url);
     HttpResponseMessage response = await RequestClipAsync(id);
-    if(response.StatusCode is System.Net.HttpStatusCode.Unauthorized)
+    if (response.StatusCode is System.Net.HttpStatusCode.Unauthorized)
     {
       RefreshToken();
       response = await RequestClipAsync(id);
     }
 
-    if(!response.IsSuccessStatusCode)
+    if (!response.IsSuccessStatusCode)
       throw new ApplicationException("Unable to fetch clip.");
 
     JsonNode? responseData = JsonSerializer.Deserialize<JsonNode>(response.Content.ReadAsStream());

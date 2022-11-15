@@ -24,7 +24,7 @@ public class Token
     if (!response.IsSuccessStatusCode)
       throw new ApplicationException($"Unable to fetch token: {response.ReasonPhrase}");
 
-    JsonNode tokenData = JsonSerializer.Deserialize<JsonNode>(response.Content.ReadAsStream()) ?? throw new ApplicationException("Unable to deserialize response data."); 
-    AccessToken = tokenData["access_token"]?.GetValue<string>() ?? throw new ApplicationException("Unable to fetch token.");
+    JsonNode? tokenData = JsonSerializer.Deserialize<JsonNode>(response.Content.ReadAsStream());
+    AccessToken = tokenData?["access_token"]?.GetValue<string>() ?? throw new ApplicationException("Unable to deserialize/fetch token.");
   }
 }
