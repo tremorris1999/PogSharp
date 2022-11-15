@@ -1,5 +1,8 @@
 namespace PogSharp.Models;
 
+/// <summary>
+/// Represents a Twitch clip as an object containing its metadata.
+/// </summary>
 public class Clip 
 {
   public string Id { get; set; } = "";
